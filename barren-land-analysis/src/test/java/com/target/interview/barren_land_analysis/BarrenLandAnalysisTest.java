@@ -1,20 +1,107 @@
 package com.target.interview.barren_land_analysis;
 
-import static org.junit.Assert.assertTrue;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class BarrenLandAnalysisTest 
-{
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
+public class BarrenLandAnalysisTest {
+
+	@Before
+	public void cleanUp() {
+		BarrenLandAnalysis.cleanUp();
+	}
+
+	@Test
+	public void testBarrenLandAnalysis1() {
+		String input = "{\"0 292 399 307\"}";
+		String expected = "116800 116800";
+
+		// Set STDIN
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		// Set STDOUT
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		System.setOut(ps);
+
+		BarrenLandAnalysis.main(null);
+
+		Assert.assertEquals(expected, baos.toString());
+	}
+
+	@Test
+	public void testBarrenLandAnalysis2() {
+		String input = "{\"48 192 351 207\", \"48 392 351 407\", \"120 52 135 547\", \"260 52 275 547\"}";
+		String expected = "22816 192608";
+
+		// Set STDIN
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		// Set STDOUT
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		System.setOut(ps);
+
+		BarrenLandAnalysis.main(null);
+
+		Assert.assertEquals(expected, baos.toString());
+	}
+
+	@Test
+	public void testBarrenLandAnalysis3() {
+		String input = "{\"99 0 100 599\", \"299 0 300 599\", \"0 199 399 200\", \"0 399 399 400\"}";
+		String expected = "19602 19602 19701 19701 19701 19701 39204 39402 39402";
+
+		// Set STDIN
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		// Set STDOUT
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		System.setOut(ps);
+
+		BarrenLandAnalysis.main(null);
+
+		Assert.assertEquals(expected, baos.toString());
+	}
+
+	@Test
+	public void testBarrenLandAnalysis4() {
+		String input = "{\"99 199 299 399\"}";
+		String expected = "199599";
+
+		// Set STDIN
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		// Set STDOUT
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		System.setOut(ps);
+
+		BarrenLandAnalysis.main(null);
+
+		Assert.assertEquals(expected, baos.toString());
+	}
+
+	@Test
+	public void testBarrenLandAnalysis5() {
+		String input = "{\"199 299 199 299\"}";
+		String expected = "239999";
+
+		// Set STDIN
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		// Set STDOUT
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream ps = new PrintStream(baos);
+		System.setOut(ps);
+
+		BarrenLandAnalysis.main(null);
+
+		Assert.assertEquals(expected, baos.toString());
+	}
 }

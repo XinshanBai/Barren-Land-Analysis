@@ -16,7 +16,7 @@ public class BarrenLandAnalysis {
 	private static final int WIDTH = 600;
 	private static final int HEIGHT = 400;
 
-	private static List<BarrenLandPosition> BarrenLandList = new ArrayList<>();
+	private static List<BarrenLandPosition> barrenLandList = new ArrayList<>();
 	private static int[][] landGrid = new int[WIDTH][HEIGHT];
 	private static List<Integer> fertileLandList = new ArrayList<>();
 	private static int fertileArea = 0;
@@ -32,11 +32,9 @@ public class BarrenLandAnalysis {
 		countFertileArea();
 
 		displayFertileAreas();
-
 	}
 
 	private static String[] readInput() {
-		System.out.println("Please input the sample:");
 		try (Scanner sc = new Scanner(System.in)) {
 			String stdinput = sc.nextLine();
 			return stdinput.replaceAll("^\\{|\"|\\}$", "").split(", ");
@@ -47,14 +45,13 @@ public class BarrenLandAnalysis {
 		if (input != null && input.length != 0) {
 			try {
 				for (String points : input) {
-					points = points.trim(); // Remove the spaces at the start and end of the points string
 					String[] barrenLandArray = points.split(" ");
 					BarrenLandPosition barrenLandPosition = new BarrenLandPosition();
 					barrenLandPosition.setBottom(Integer.valueOf(barrenLandArray[0]));
 					barrenLandPosition.setLeft(Integer.valueOf(barrenLandArray[1]));
 					barrenLandPosition.setTop(Integer.valueOf(barrenLandArray[2]));
 					barrenLandPosition.setRight(Integer.valueOf(barrenLandArray[3]));
-					BarrenLandList.add(barrenLandPosition);
+					barrenLandList.add(barrenLandPosition);
 				}
 			} catch (Exception e) {
 				System.out.println("Invalid input");
@@ -93,11 +90,16 @@ public class BarrenLandAnalysis {
 
 	private static void displayFertileAreas() {
 		Collections.sort(fertileLandList);
-		System.out.println(fertileLandList);
+		StringBuilder results = new StringBuilder();
+		for (int fertileArea : fertileLandList) {
+			results.append(fertileArea);
+			results.append(" ");
+		}
+		System.out.print(results.toString().trim());
 	}
 
 	private static boolean isBarrenLand(int i, int j) {
-		for (BarrenLandPosition barrenLandPosition : BarrenLandList) {
+		for (BarrenLandPosition barrenLandPosition : barrenLandList) {
 			if (i >= barrenLandPosition.getLeft() && i <= barrenLandPosition.getRight()
 					&& j >= barrenLandPosition.getBottom() && j <= barrenLandPosition.getTop()) {
 				return true;
@@ -125,5 +127,12 @@ public class BarrenLandAnalysis {
 			tileStack.push(new Point(x - 1, y));
 			tileStack.push(new Point(x + 1, y));
 		}
+	}
+	
+	public static void cleanUp() {
+		barrenLandList = new ArrayList<>();
+		landGrid = new int[WIDTH][HEIGHT];
+		fertileLandList = new ArrayList<>();
+		fertileArea = 0;
 	}
 }
