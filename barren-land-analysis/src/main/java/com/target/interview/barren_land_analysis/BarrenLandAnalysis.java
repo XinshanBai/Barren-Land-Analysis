@@ -64,7 +64,8 @@ public class BarrenLandAnalysis {
 					// The requirement indicates the first two integers are the coordinates of the
 					// bottom left corner in the given rectangle, and the last two integers are the
 					// coordinates of the top right corner.
-					// Thus use 0 as bottom, 1 as left, 2 as top and 3 as right makes the problem easier to solve.
+					// Thus use 0 as bottom, 1 as left, 2 as top and 3 as right makes the problem
+					// easier to solve.
 					String[] barrenLandArray = points.split(" ");
 					BarrenLandPosition barrenLandPosition = new BarrenLandPosition();
 					barrenLandPosition.setBottom(Integer.valueOf(barrenLandArray[0]));
@@ -125,7 +126,8 @@ public class BarrenLandAnalysis {
 	private static void displayFertileAreas() {
 		Collections.sort(fertileLandList);
 		StringBuilder results = new StringBuilder();
-		// Convert the result list to required format which is fertile lands areas separated by whitespace.
+		// Convert the result list to required format which is fertile lands areas
+		// separated by whitespace.
 		for (int fertileArea : fertileLandList) {
 			results.append(fertileArea);
 			results.append(" ");
