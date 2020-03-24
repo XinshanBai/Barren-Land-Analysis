@@ -10,9 +10,43 @@ You are given a set of rectangles that contain the barren land. These rectangles
 ### Output   
 Output all the fertile land area in square meters, sorted from smallest area to greatest, separated by a space. 
 
-### Samples 
-Input: {“0 292 399 307”}  
-Output: 116800  116800    
+Sample Input | Sample Output
+------------ | -------------
+{“0 292 399 307”} | 116800  116800
+{“48 192 351 207”, “48 392 351 407”,<br> “120 52 135 547”, “260 52 275 547”} | 22816 192608
 
-Input: {“48 192 351 207”, “48 392 351 407”, “120 52 135 547”, “260 52 275 547”}  
-Output: 22816 192608    
+## Getting Started
+Download and install the following software if you do not have them on your machine.
+
+**JDK8**  
+To install java, [download JDK8 installer](https://www.oracle.com/java/technologies/javase-jdk8-downloads.html) and add/update the `JAVA_HOME` variable to JDK install folder.  
+Include `path_to_JDK8/bin` directory in `PATH` variable.
+
+**Maven**  
+[Download Maven](https://maven.apache.org/download.cgi) and add `MAVEN_HOME` Environment Variables.  
+Include `path_to_maven/bin` directory in `PATH` variable.  
+
+Download or pull the code to your local machine.
+## Running the tests
+### Automated test
+Find `test_barren_land_analysis.cmd`, double click it.
+#### test_barren_land_analysis.cmd
+This script runs maven build, then invokes the jar file for each test case specified in the `barren_land_analysis_test_cases.txt`
+
+### Manual test
+Import the project as maven project into your prefered IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/main/java` folder.  
+Execute the main class, maually type or copy/paste the sample input into the console after program starts, press `Enter`.
+
+### Junit test
+Import the project as maven project into your prefered IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/test/java` folder.  
+Run the Junit test class.
+
+## Tools
+* [Eclipse](https://www.eclipse.org/)
+* [Java](https://www.java.com)
+* [Maven](https://maven.apache.org/)
+* [Git](https://git-scm.com/)
+
+## Authors
+**Xinshan Bai** - [XinshanBai](https://github.com/XinshanBai)
+
