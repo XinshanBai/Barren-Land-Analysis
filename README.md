@@ -29,8 +29,8 @@ Include `path_to_maven/bin` directory in `PATH` variable.
 Download or pull the code to your local machine.
 ## Running the tests
 ### Automated test
-Find `test_barren_land_analysis.cmd`, double click it.
-#### test_barren_land_analysis.cmd
+Find `test_barren_land_analysis.cmd`, double click it.  
+**test_barren_land_analysis.cmd**  
 This script runs maven build, then invokes the jar file for each test case specified in the `barren_land_analysis_test_cases.txt`
 
 ### Manual test
