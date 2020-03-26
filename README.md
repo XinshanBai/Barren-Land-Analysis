@@ -34,11 +34,11 @@ Find `test_barren_land_analysis.cmd`, double click it.
 This script runs maven build, then invokes the jar file for each test case specified in the `barren_land_analysis_test_cases.txt`
 
 ### Manual test
-Import the project as maven project into your prefered IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/main/java` folder.  
-Execute the main class, maually type or copy/paste the sample input into the console after program starts, press `Enter`.
+Import the project as a maven project into your preferred IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/main/java` folder.  
+Execute the main class, manually type or copy/paste the sample input into the console after program starts, press `Enter`.
 
 ### Junit test
-Import the project as maven project into your prefered IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/test/java` folder.  
+Import the project as a maven project into your preferred IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/test/java` folder.  
 Run the Junit test class.
 
 ## Time Complexity
@@ -64,10 +64,10 @@ The time complexity for this method is **O(I)**, I is the number of barren land 
 ### createLandGrid();
 This method creates a grid represents the whole land, 0 indicates barren tile, 1 indicate fertile tile, each tile is checked against all barren land I  
 The time complexity for this method is **O(Imn)**  
-m is the the width of the land  
+m is the width of the land  
 n is the height of the land
 ### countFertileArea();
-This method count the fertile area with depth first search. Each tile is visited twice, one by the DFS counter(exclude the barren tiles), one by the outter loop checks the tiles  
+This method counts the fertile area with depth-first search. Each tile is visited twice, one by the DFS counter(exclude the barren tiles), one by the outer loop checks the tiles  
 The time complexity for this method is approximately **O(2mn)**  
 
 **Add all above together is O(I) + O(Imn) + O(2mn) = O(I+(I+2)mn)**  
