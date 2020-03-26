@@ -45,6 +45,8 @@ Run the Junit test class.
 ```java
 	public static void main(String[] args) {
 
+		initLandGrid(args);
+
 		String[] input = readInput();
 
 		initBarrenLandList(input);
@@ -72,7 +74,10 @@ The time complexity for this method is approximately **O(2mn)**
 **Ignore constant +I = O((I+2)mn)**  
 **If I can not be ignored, then time complexity for this program is O(Imn)**  
 **If I is always small, then it can be ignored with \*2 together, the final time complexity is O(mn)**  
-
+## Performance
+Please check [PerformanceDiscussion.md](https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/PerformanceDiscussion.md) for details
+## Notes
+Please view [Notes.md](https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/Notes.md) for details about the solution design and challenges.
 ## Tools
 * [Eclipse](https://www.eclipse.org/)
 * [Java](https://www.java.com)
