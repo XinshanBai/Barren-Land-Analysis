@@ -41,12 +41,42 @@ Execute the main class, maually type or copy/paste the sample input into the con
 Import the project as maven project into your prefered IDE. Find `BarrenLandAnalysis.java` in package `com.target.interview.barren_land_analysis` in the `src/test/java` folder.  
 Run the Junit test class.
 
+## Time Complexity
+```java
+	public static void main(String[] args) {
+
+		String[] input = readInput();
+
+		initBarrenLandList(input);
+
+		createLandGrid();
+
+		countFertileArea();
+
+		displayFertileAreas();
+	}
+```
+### initBarrenLandList(input);
+This method converts the input coordinates into BarrenLandPosition object, make it easier to access.  
+The time complexity for this method is **O(I)**, I is the number of barren land in the input data  
+### createLandGrid();
+This method creates a grid represents the whole land, 0 indicates barren tile, 1 indicate fertile tile, each tile is checked against all barren land I  
+The time complexity for this method is **O(Imn)**  
+m is the the width of the land  
+n is the height of the land
+### countFertileArea();
+This method count the fertile area with depth first search. Each tile is visited twice, one by the DFS counter(exclude the barren tiles), one by the outter loop checks the tiles  
+The time complexity for this method is approximately **O(2mn)**  
+
+**Add all above together is O(I) + O(Imn) + O(2mn) = O(I+(I+2)mn)**  
+**Ignore constant +I = O((I+2)mn)**  
+**If I can not be ignored, then time complexity for this program is O(Imn)**  
+**If I is always small, then it can be ignored with \*2 together, the final time complexity is O(mn)**  
+
 ## Tools
 * [Eclipse](https://www.eclipse.org/)
 * [Java](https://www.java.com)
 * [Maven](https://maven.apache.org/)
 * [Git](https://git-scm.com/)
 
-## Authors
-**Xinshan Bai** - [XinshanBai](https://github.com/XinshanBai)
 
