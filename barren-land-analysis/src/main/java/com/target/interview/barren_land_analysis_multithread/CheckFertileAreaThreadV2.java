@@ -8,11 +8,11 @@ import static com.target.interview.barren_land_analysis_multithread.BarrenLandAn
 import java.awt.Point;
 import java.util.Stack;
 
-public class CheckFertileAreaThread extends Thread {
+public class CheckFertileAreaThreadV2 extends Thread {
 
 	private Stack<Point> tileStack;
 
-	public CheckFertileAreaThread(Stack<Point> tileStack) {
+	public CheckFertileAreaThreadV2(Stack<Point> tileStack) {
 		super();
 		this.tileStack = tileStack;
 	}

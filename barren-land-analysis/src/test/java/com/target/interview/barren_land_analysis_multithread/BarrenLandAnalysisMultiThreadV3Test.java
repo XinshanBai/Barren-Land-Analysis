@@ -8,17 +8,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
+public class BarrenLandAnalysisMultiThreadV3Test {
 
-	private static final String[] landSize = {"6000", "4000"};
-	
 	/**
 	 * Need to clean up all static variables before each testing otherwise the
 	 * results are effected by previous tests.
 	 */
 	@Before
 	public void cleanUp() {
-		BarrenLandAnalysisMultiThreadV1.cleanUp();
+		BarrenLandAnalysisMultiThreadV3.cleanUp();
 	}
 
 	/**
@@ -27,7 +25,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 	@Test
 	public void testBarrenLandAnalysisMultiThread1() {
 		String input = "{\"0 292 399 307\"}";
-		String expected = "23993600";
+		String expected = "116800 116800";
 
 		// Set STDIN
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -37,7 +35,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV1.main(landSize);
+		BarrenLandAnalysisMultiThreadV3.main(null);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -48,7 +46,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 	@Test
 	public void testBarrenLandAnalysisMultiThread2() {
 		String input = "{\"48 192 351 207\", \"48 392 351 407\", \"120 52 135 547\", \"260 52 275 547\"}";
-		String expected = "22816 23952608";
+		String expected = "22816 192608";
 
 		// Set STDIN
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -58,7 +56,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV1.main(landSize);
+		BarrenLandAnalysisMultiThreadV3.main(null);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -70,7 +68,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 	@Test
 	public void testBarrenLandAnalysisMultiThread3() {
 		String input = "{\"99 0 100 599\", \"299 0 300 599\", \"0 199 399 200\", \"0 399 399 400\"}";
-		String expected = "19602 19701 39204 39402 23878107";
+		String expected = "19602 19602 19701 19701 19701 19701 39204 39402 39402";
 
 		// Set STDIN
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -80,7 +78,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV1.main(landSize);
+		BarrenLandAnalysisMultiThreadV3.main(null);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -91,7 +89,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 	@Test
 	public void testBarrenLandAnalysisMultiThread4() {
 		String input = "{\"99 199 299 399\"}";
-		String expected = "23959599";
+		String expected = "199599";
 
 		// Set STDIN
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -101,7 +99,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV1.main(landSize);
+		BarrenLandAnalysisMultiThreadV3.main(null);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -112,7 +110,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 	@Test
 	public void testBarrenLandAnalysisMultiThread5() {
 		String input = "{\"199 299 199 299\"}";
-		String expected = "23999999";
+		String expected = "239999";
 
 		// Set STDIN
 		System.setIn(new ByteArrayInputStream(input.getBytes()));
@@ -122,7 +120,7 @@ public class BarrenLandAnalysisMultiThreadV1LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV1.main(landSize);
+		BarrenLandAnalysisMultiThreadV3.main(null);
 
 		Assert.assertEquals(expected, baos.toString());
 	}

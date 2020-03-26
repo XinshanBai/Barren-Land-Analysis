@@ -10,6 +10,8 @@ import org.junit.Test;
 
 public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 
+	private static final String[] landSize = {"6000", "4000"};
+	
 	/**
 	 * Need to clean up all static variables before each testing otherwise the
 	 * results are effected by previous tests.
@@ -35,7 +37,7 @@ public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV2.main(null);
+		BarrenLandAnalysisMultiThreadV2.main(landSize);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -56,7 +58,7 @@ public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV2.main(null);
+		BarrenLandAnalysisMultiThreadV2.main(landSize);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -78,7 +80,7 @@ public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV2.main(null);
+		BarrenLandAnalysisMultiThreadV2.main(landSize);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -99,7 +101,7 @@ public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV2.main(null);
+		BarrenLandAnalysisMultiThreadV2.main(landSize);
 
 		Assert.assertEquals(expected, baos.toString());
 	}
@@ -120,7 +122,7 @@ public class BarrenLandAnalysisMultiThreadV2LargerLandTest {
 		PrintStream ps = new PrintStream(baos);
 		System.setOut(ps);
 
-		BarrenLandAnalysisMultiThreadV2.main(null);
+		BarrenLandAnalysisMultiThreadV2.main(landSize);
 
 		Assert.assertEquals(expected, baos.toString());
 	}

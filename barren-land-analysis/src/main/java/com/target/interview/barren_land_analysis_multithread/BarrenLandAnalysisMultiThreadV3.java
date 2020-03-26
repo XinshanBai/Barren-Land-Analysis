@@ -1,9 +1,15 @@
 package com.target.interview.barren_land_analysis_multithread;
 
 import java.awt.Point;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -13,17 +19,21 @@ import com.target.interview.barren_land_analysis.BarrenLandPosition;
  * Barren Land Analysis
  *
  */
-public class BarrenLandAnalysisMultiThreadV1 {
+public class BarrenLandAnalysisMultiThreadV3 {
 
-	private static int WIDTH = 600;
-	private static int HEIGHT = 400;
+	public static int WIDTH = 600;
+	public static int HEIGHT = 400;
 
 	private static final int NUMBER_OF_THREADS = 50;
 
+	// The list contains HashSet objects, each object will store all the threads' id
+	// who processed the same fertile land
+	public static List<Set<Integer>> connectedThreadList = new ArrayList<>();
+
 	private static List<BarrenLandPosition> barrenLandList = new ArrayList<>();
-	private static AtomicInteger[][] landGrid;
+	public static AtomicInteger[][] landGrid;
 	private static List<AtomicInteger> fertileLandList = new ArrayList<>();
-	private static AtomicInteger fertileArea = new AtomicInteger(0);
+	public static AtomicInteger fertileArea = new AtomicInteger(0);
 
 	public static void main(String[] args) {
 
@@ -33,9 +43,11 @@ public class BarrenLandAnalysisMultiThreadV1 {
 
 		initBarrenLandList(input);
 
-		createLandGrid();
+		createLandGridMutiThread();
 
 		countFertileAreaMutiThread();
+
+		countRestFertileArea();
 
 		displayFertileAreas();
 	}
@@ -108,30 +120,65 @@ public class BarrenLandAnalysisMultiThreadV1 {
 	 * Create a two dimensional array which represents the whole land based on the
 	 * console input. 0 indicates the barren tiles. 1 indicates the fertile tiles.
 	 */
-	private static void createLandGrid() {
-		for (int i = 0; i < WIDTH; i++) {
-			for (int j = 0; j < HEIGHT; j++) {
-				if (isBarrenLand(i, j)) {
-					// barren tile
-					landGrid[i][j] = new AtomicInteger(0);
-				} else {
-					// fertile tile
-					landGrid[i][j] = new AtomicInteger(1);
-				}
+	private static void createLandGridMutiThread() {
+		Runnable runnable = () -> {
+			Queue<Point> tileQueue = new ArrayDeque<>();
+			tileQueue.add(findRandomPoint());
+			while (!tileQueue.isEmpty()) {
+				Point currentTile = tileQueue.poll();
+				int x = (int) currentTile.getX();
+				int y = (int) currentTile.getY();
+				if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT || landGrid[x][y] != null)
+					continue;
+
+				if (isBarrenLand(x, y))
+					landGrid[x][y] = new AtomicInteger(0);
+				else
+					landGrid[x][y] = new AtomicInteger(1);
+
+				// Find all adjacent tiles and add them to the stack for checking.
+				tileQueue.add(new Point(x, y - 1)); // down
+				tileQueue.add(new Point(x, y + 1)); // up
+				tileQueue.add(new Point(x - 1, y)); // left
+				tileQueue.add(new Point(x + 1, y)); // right
+			}
+
+		};
+
+		List<Thread> createGridThreadList = new ArrayList<>();
+		int numberOfThreads = 0;
+		while (numberOfThreads < NUMBER_OF_THREADS) {
+			Thread createLandGridThread = new Thread(runnable);
+			createLandGridThread.start();
+			createGridThreadList.add(createLandGridThread);
+			numberOfThreads++;
+		}
+
+		for (Thread createLandGridThread : createGridThreadList) {
+			try {
+				createLandGridThread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
+
+		/*
+		 * for (int i = 0; i < WIDTH; i++) { for (int j = 0; j < HEIGHT; j++) { if
+		 * (isBarrenLand(i, j)) { // barren tile landGrid[i][j] = new AtomicInteger(0);
+		 * } else { // fertile tile landGrid[i][j] = new AtomicInteger(1); } } }
+		 */
 	}
 
 	/**
 	 * Check all the tiles and count the fertile lands' area. Each fertile land's
 	 * area is added into the fertile land list.
 	 */
-	private static void countFertileAreaMutiThread() {
+	private static void countRestFertileArea() {
 		for (int i = 0; i < WIDTH; i++) {
 			for (int j = 0; j < HEIGHT; j++) {
-				// Is fertile tile
+				// Is unprocessed fertile tile
 				if (landGrid[i][j].get() == 1) {
-					checkFertileTilesMutiThread(i, j);
+					checkFertileTiles(i, j);
 					fertileLandList.add(fertileArea);
 					fertileArea = new AtomicInteger(0);
 				}
@@ -184,78 +231,130 @@ public class BarrenLandAnalysisMultiThreadV1 {
 	 * @param i current fertile tile's horizontal coordinate
 	 * @param j current fertile tile's vertical coordinate
 	 */
-	private static void checkFertileTilesMutiThread(int i, int j) {
+	private static void checkFertileTiles(int i, int j) {
 		Stack<Point> tileStack = new Stack<>();
 		tileStack.push(new Point(i, j));
 
-		Runnable checkFertileTilesRunnable = () -> {
-			while (true) {
-				Point currentTile = null;
-				synchronized (tileStack) {
-					if (!tileStack.isEmpty()) {
-						currentTile = tileStack.pop();
-					} else {
-						// Following threads created very shortly after the previous ones, the stack
-						// might be empty at that moment, need to release the lock on stack and let the
-						// other threads push new Point objects into it
-						try {
-							tileStack.wait(1);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						// If the thread is still empty after shortly release the lock, the check is
-						// done
-						if (tileStack.isEmpty()) {
-							break;
-						} else {
-							continue;
-						}
-					}
-				}
-				if (currentTile != null) {
-					int x = (int) currentTile.getX();
-					int y = (int) currentTile.getY();
+		while (!tileStack.isEmpty()) {
+			Point currentTile = tileStack.pop();
+			int x = (int) currentTile.getX();
+			int y = (int) currentTile.getY();
 
-					if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-						continue;
+			// If the point is out of the grid's bound or it is a barren tile or visited.
+			if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT || landGrid[x][y].get() == 0)
+				continue;
 
-					synchronized (landGrid[x][y]) {
-						// If the point is a barren tile or visited.
-						if (landGrid[x][y].get() == 0)
-							continue;
+			// Mark the fertile tile as visited by changing it to a barren tile.
+			landGrid[x][y] = new AtomicInteger(0);
+			fertileArea.addAndGet(1);
+			// Find all adjacent tiles and add them to the stack for checking.
+			tileStack.push(new Point(x, y - 1));
+			tileStack.push(new Point(x, y + 1));
+			tileStack.push(new Point(x - 1, y));
+			tileStack.push(new Point(x + 1, y));
+		}
+	}
 
-						// Mark the fertile tile as visited by changing it to a barren tile.
-						landGrid[x][y].set(0);
-					}
-
-					fertileArea.addAndGet(1);
-
-					// Find all adjacent tiles and add them to the stack for checking.
-					tileStack.push(new Point(x, y - 1)); // down
-					tileStack.push(new Point(x, y + 1)); // up
-					tileStack.push(new Point(x - 1, y)); // left
-					tileStack.push(new Point(x + 1, y)); // right
-				}
-			}
-		};
-
-		List<Thread> threadList = new ArrayList<>();
-
+	private static void countFertileAreaMutiThread() {
+		Map<Integer, MultiStartingPointThreadV3> threadMap = new HashMap<>();
 		int numberOfThreads = 0;
 		while (numberOfThreads < NUMBER_OF_THREADS) {
-			Thread checkFertileTilesThread = new Thread(checkFertileTilesRunnable);
-			checkFertileTilesThread.start();
-			threadList.add(checkFertileTilesThread);
+			// 0 indicates barren tile, 1 indicate fertile tile, starts with 2, each number
+			// represents the thread id of the thread who processed the tile
+			int newThreadCustomId = numberOfThreads + 2;
+			MultiStartingPointThreadV3 multiStartingPointThread = new MultiStartingPointThreadV3(newThreadCustomId,
+					findRandomNonBarrenLand());
+			multiStartingPointThread.start();
+			threadMap.put(newThreadCustomId, multiStartingPointThread);
 			numberOfThreads++;
 		}
 
-		for (Thread checkFertileTilesThread : threadList) {
+		// Wait for all thread to finish their work
+		for (Map.Entry<Integer, MultiStartingPointThreadV3> multiStartingPointThread : threadMap.entrySet()) {
 			try {
-				checkFertileTilesThread.join();
+				multiStartingPointThread.getValue().join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+
+		int currentArea = 0;
+
+		// Merge all connected threads ids
+		mergeConnectedThreadRecursively();
+
+		// Now add all the connected fertile area together
+		for (Set<Integer> connectedFertileAreaThreadIds : connectedThreadList) {
+			for (int threadCustomId : connectedFertileAreaThreadIds) {
+				currentArea += threadMap.get(threadCustomId).getCoveredArea();
+			}
+			fertileLandList.add(new AtomicInteger(currentArea));
+			currentArea = 0;
+		}
+	}
+
+	private static Point findRandomNonBarrenLand() {
+		return findRandomPoint(true);
+	}
+
+	private static Point findRandomPoint() {
+		return findRandomPoint(false);
+	}
+
+	private static Point findRandomPoint(boolean requireNonBarrenLand) {
+		Point randomPoint = new Point();
+		Random random = new Random();
+		int x = random.nextInt(WIDTH);
+		int y = random.nextInt(HEIGHT);
+		if (requireNonBarrenLand) {
+			while (landGrid[x][y].get() == 0) {
+				x = random.nextInt(WIDTH);
+				y = random.nextInt(HEIGHT);
+			}
+		}
+		randomPoint.x = x;
+		randomPoint.y = y;
+		return randomPoint;
+	}
+
+	private static void mergeConnectedThreadRecursively() {
+		boolean isKeepMerging = true;
+		while (isKeepMerging) {
+			isKeepMerging = mergeConnectedThreads();
+		}
+	}
+
+	private static boolean mergeConnectedThreads() {
+
+		boolean isSetMerged = false;
+		List<Set<Integer>> mergedSetList = new ArrayList<>();
+		for (Set<Integer> idSet : connectedThreadList) {
+			isSetMerged = false;
+			if (mergedSetList.size() == 0) {
+				mergedSetList.add(idSet);
+				continue;
+			}
+			for (int id : idSet) {
+				for (Set<Integer> mergedIdSet : mergedSetList) {
+					if (mergedIdSet.contains(id)) {
+						mergedIdSet.addAll(idSet);
+						isSetMerged = true;
+						break;
+					}
+				}
+				if (isSetMerged) {
+					break;
+				}
+			}
+			if (!isSetMerged) {
+				mergedSetList.add(idSet);
+			}
+		}
+		connectedThreadList = mergedSetList;
+		// The merge action needs to be called recursively until there is no new Set
+		// being added or merged
+		// When both actions are false, set return value "isKeepMerging" to false
+		return isSetMerged;
 	}
 
 	/**
@@ -268,5 +367,6 @@ public class BarrenLandAnalysisMultiThreadV1 {
 		barrenLandList = new ArrayList<>();
 		fertileLandList = new ArrayList<>();
 		fertileArea = new AtomicInteger(0);
+		connectedThreadList = new ArrayList<>();
 	}
 }

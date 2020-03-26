@@ -10,13 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-public class MultiStartingPointThread extends Thread {
+public class MultiStartingPointThreadV2 extends Thread {
 
 	private int customId;
 	private int coveredArea;
 	private Point startingPoint;
 
-	public MultiStartingPointThread(int customId, Point startingPoint) {
+	public MultiStartingPointThreadV2(int customId, Point startingPoint) {
 		super();
 		this.customId = customId;
 		this.startingPoint = startingPoint;

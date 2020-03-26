@@ -13,20 +13,17 @@ import java.util.Stack;
  */
 public class BarrenLandAnalysis {
 
-	private static final int WIDTH = 600;
-	private static final int HEIGHT = 400;
-
-	/*
-	 * private static final int WIDTH = 6000; private static final int HEIGHT =
-	 * 4000;
-	 */
+	private static int WIDTH = 600;
+	private static int HEIGHT = 400;
 
 	private static List<BarrenLandPosition> barrenLandList = new ArrayList<>();
-	private static int[][] landGrid = new int[WIDTH][HEIGHT];
+	private static int[][] landGrid;
 	private static List<Integer> fertileLandList = new ArrayList<>();
 	private static int fertileArea = 0;
 
 	public static void main(String[] args) {
+
+		initLandGrid(args);
 
 		String[] input = readInput();
 
@@ -37,6 +34,20 @@ public class BarrenLandAnalysis {
 		countFertileArea();
 
 		displayFertileAreas();
+	}
+
+	/**
+	 * Set a different land size for testing
+	 * 
+	 * @param args String array, the first element is WIDTH, second is HEIGHT
+	 */
+	private static void initLandGrid(String[] args) {
+		if (args != null && args.length != 0) {
+			WIDTH = Integer.valueOf(args[0]);
+			HEIGHT = Integer.valueOf(args[1]);
+		}
+
+		landGrid = new int[WIDTH][HEIGHT];
 	}
 
 	/**
@@ -198,8 +209,9 @@ public class BarrenLandAnalysis {
 	 * code for testing purpose
 	 */
 	public static void cleanUp() {
+		WIDTH = 600;
+		HEIGHT = 400;
 		barrenLandList = new ArrayList<>();
-		landGrid = new int[WIDTH][HEIGHT];
 		fertileLandList = new ArrayList<>();
 		fertileArea = 0;
 	}
