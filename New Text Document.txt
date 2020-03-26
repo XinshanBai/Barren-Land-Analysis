@@ -1,0 +1,5 @@
+1. Getting StackEmpty error
+2. Synchonize the stack when poping
+3. Keep getting wrong results
+4. Try to Synchonize different part of the code
+5. Synchonized the fertile area variable
