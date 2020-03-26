@@ -58,7 +58,8 @@ Now we use DFS to traversal the grid. Start to call DFS when we find a fertile t
 		}
 	}
 ```
-Now inside the DFS method, instead of creating a object and have a visited boolean property, we can just set the fertile tile from 1 to 0, so we do not count them again. Here is the recursive call. Keep track of the `fertileAreas` we found, once the recursive call is done, which means we found our first fertile land, add that `fertileAreas` to the `fertileLandList`.  
+Now inside the DFS method, instead of creating a object and have a visited boolean property, we can just set the fertile tile from 1 to 0, so we do not count them again.  
+Here is the recursive call. Keep track of the `fertileAreas` we found, once the recursive call is done, which means we found our first fertile land, add that `fertileAreas` to the `fertileLandList`.  
 ```java
 private static void checkAdjacentTiles(int i, int j) {
 		if(i < 0 || i >= WIDTH || j < 0 || j >= HEIGHT || land[i][j] == 0)
@@ -72,5 +73,22 @@ private static void checkAdjacentTiles(int i, int j) {
 	}
 ```
 And the end, format the value in `fertileLandList`, and display them as required in the problem description.
-
+```java
+	/**
+	 * Sort the results in the fertile land list and display the results as
+	 * requested format.
+	 */
+	private static void displayFertileAreas() {
+		fertileLandList.sort((AtomicInteger o1, AtomicInteger o2) -> o1.get() - o2.get());
+		StringBuilder results = new StringBuilder();
+		// Convert the result list to required format which is fertile lands areas
+		// separated by whitespace.
+		for (AtomicInteger fertileArea : fertileLandList) {
+			results.append(fertileArea);
+			results.append(" ");
+		}
+		// Remove the extra whitespace at the end then display the results.
+		System.out.print(results.toString().trim());
+	}
+```
 ### BUT, there was a problem...
