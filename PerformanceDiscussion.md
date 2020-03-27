@@ -151,6 +151,8 @@ result should be
 `[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]`
 ### `BarrenLandAnalysisMultiThreadV3`
 Since sharing the stack was slowing things down. I decided to try to have V3, but remove the share stack part to see if it gets faster. Here are the results with 50 threads. Strangely it actually got a bit slower... For this one, I really have no idea why this could be happening.:question:  
+Below are 2 samples of the junit tests' screenshots, larger land is using 6000 * 4000 instead of 600 * 400, thread number 50  
+You can clearly see V2 and V3 performs much better than the non multi-thread tests
 ![PerformanceTest1](https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/images/PerformanceTest1.PNG?raw=true)
 ![PerformanceTest2](https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/images/PerformanceTest2.PNG?raw=true)
 
