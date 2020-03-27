@@ -1,4 +1,4 @@
-## Notes
+# Notes
 This file provides some details about how the design decisions were made and some challenges in the process.
 ##  First draft of Sample1
 I tried to draw a grid based on the sample data, the first grid came out my mind has the origin at the top left. But based on the description of the problem. This is not correct.  
