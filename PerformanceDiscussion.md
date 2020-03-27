@@ -119,8 +119,35 @@ All these trivial race conditions are not easy to find, these took me a lot of t
 * Race conditions are still happening. So I also updated the `fertileArea` to use `AtomicInteger`  
 * I try to verify if the mult-thread is working by printing some values to the console. When I have 2 threads, it shows the second thread immediately dies after it starts.  
 This was due to the second thread started too fast, the first thread just picked up the only Point in the stack. The stack went empty, then the second thread checks the empty stack and dies.  
-But this is really strange, because if the second thread truelly dead right after starts, where did the race condition came from? 
+But this is really strange, because if the second thread truelly dead right after starts, where did the race condition came from?  
+My thoughts would be second thread only dies when I added printings. This is common in multi-thread issues, if we slow down the execution, sometimes the problem just appears or goes away.
+But to solve this I tried to add a `tileStack.wait(1);` on the stack lock, let the other threads push new Points into it, if the stack is still empty after this, then `break;`.
+Also V1 only performaces slightly better when the thread number is very limited, for example 2 or 4 threads. When it is high, like 50, the speed slows significantly. I think this is because when there are too many threads, more of them will be waiting for the lock on the stack, and the reason it slows down also have something to do with using `AtomicInteger` instead of `int`.
 ### Start threads at random points in the grid `BarrenLandAnalysisMultiThreadV2.java`
-
+V1's performance was not good at all.  
+So I try to think hard and came out the second solution -> pick random points in the grid, start threads from there.  
+Here comes a few challenges with this idea:  
+1. How to find the connected threads
+2. How to add them together
+3. How to find next fertile land  
+Here are the anwsers:
+1. Give each thread an ID, while the threads are working, they mark the tiles with their own IDs instead of `0`. So when the other threads sees the tile has a different number, it can record that number as a connected thread. 
+2. If we know who are connected, at the end we just need to add all the areas counted by the connected threads. But this was a little trick, I had to think about it eventally I came out the way of how to mark them and how to count at the end. More on this later.
+3. I can't... Because it is randome, I am not checking each tile in order like the one I did before. This was the biggest challenge. So in the end, I have to kept the looping part of original program to handle the rest fertile land which is not being covered by the random starting points threads. But if you think about it, with more random starting point threads created, the chance of having a fertile land not being covered is smaller, also if the threads handles the most of them, the looping checking will only see the land is check and goes through it really fast. So this is not too bad.  
+*I have also added using randome points to start multi-thread to fill the grid*
+#### On how to calculate fertile lands with connected threads
+I created global variable `List<Set<Integer>> connectedThreadList`. I know global variable is not good, but here the problems are becoming more and more complicated, using them can help me to focus on the actual problem.  
+This list holds a list of `HashSet` which contains the connected thread IDs.  
+But the problem is thread 1 can meet thread 2, thread 2 can connect to thread 3, if thread 2 handles all the points between thread 1 and 3, thread 1 will not see thread 3 as connected. The list will look like this  
+`[[1, 2],[2, 3]]`  
+But and the end it needs to be `[[1, 2, 3]]`  
+So I created a merge method to merge them.  
+Below is an actual example of the value I captured while running the program. And it requires recrusive calls to complete the merge.  
+It has 20 threads, so here are 20 numbers  
+`[[16, 3, 8, 10, 11, 14], [19, 20, 6, 7, 9, 12, 15], [18, 2, 4, 5, 13], [17, 21, 8, 9, 11, 12, 14, 15], [2, 19, 5, 6, 7, 13]]`
+result should be  
+`[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]`
+### `BarrenLandAnalysisMultiThreadV3`
+Since sharing the stack was slowing things down. I decided to try to have V3, but remove the share stack part to see if it gets faster. Here are the results with 50 threads. Strangely it actually got a bit slower... For this one I really have no idea why this could be happening.:question:
 
 
