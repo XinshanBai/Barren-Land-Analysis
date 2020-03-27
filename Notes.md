@@ -134,5 +134,5 @@ During the unit test, run a single test always pass, but run them together only 
 This was because the global  variables I have used were  not cleared between tests. So I created a cleanup method at the end just to set all of them back to initial states. Then call this method in the unit test before each test.
 ### Challenges
 There was no actual challenge while implementing this.  
-At first, I was surprised that the recursive method did not work because I recently worked on some questions with this method, and it was perfectly fine. But it is easy to see the stack size was the problem.  
-I haven't done unit test for console input and output before. But internet is always here to help.
+* At first, I was surprised that the recursive method did not work because I recently worked on some questions with this method, and it was perfectly fine. But it is easy to see the stack size was the problem.  
+* I haven't done unit test for console input and output before. But internet is always here to help.
