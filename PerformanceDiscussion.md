@@ -135,6 +135,7 @@ Here are the answers:
 1. Give each thread an ID, while the threads are working, they mark the tiles with their own IDs instead of `0`. So when the other threads see the tile has a different number, it can record that number as a connected thread. 
 2. If we know who is connected, at the end we just need to add all the areas counted by the connected threads. But this was a little trick, I had to think about it eventually  I came out the way of how to mark them and how to count at the end. More on this later.
 3. I can't... Because it is random, I am not checking each tile in order like the one I did before. This was the biggest challenge. So in the end, I have to keep the looping part of the original program to handle the rest fertile land which is not being covered by the random starting points threads. But if you think about it, with more random starting point threads created, the chance of having a fertile land not being covered is smaller, also if the threads handle the most of them, the looping checking will only see the land is check and goes through it really fast. So this is not too bad.  
+
 **I have also added using random points to start multi-thread to fill the grid**
 #### On how to calculate fertile lands with connected threads
 I created global variable `List<Set<Integer>> connectedThreadList`. I know global variable is not good, but here the problems are becoming more and more complicated, using them can help me to focus on the actual problem.  
@@ -150,5 +151,6 @@ result should be
 `[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]`
 ### `BarrenLandAnalysisMultiThreadV3`
 Since sharing the stack was slowing things down. I decided to try to have V3, but remove the share stack part to see if it gets faster. Here are the results with 50 threads. Strangely it actually got a bit slower... For this one, I really have no idea why this could be happening.:question:
-
+<img src="https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/images/PerformanceTest1.PNG?raw=true" width="70%">
+<img src="https://github.com/XinshanBai/Barren-Land-Analysis/blob/master/images/PerformanceTest2.PNG?raw=true" width="70%">
 
